@@ -44,15 +44,16 @@ class LoginAPIView(APIView):
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-# API for Logout
+
 class LogoutAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # ✅ Requires authentication
 
     def post(self, request):
         try:
-            refresh_token = request.data.get("refresh")
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({'message': 'Successfully logged out'}, status=status.HTTP_205_RESET_CONTENT)
+            # Logout only requires removing the token from the client side
+            return Response({"message": "Successfully logged out."}, 
+                            status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, 
+                            status=status.HTTP_400_BAD_REQUEST)
+
